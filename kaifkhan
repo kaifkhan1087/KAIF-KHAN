@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pathan Mohammad Kaif Khan – Minimal Modern Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg1: #0f172a;
+      --bg2: #020617;
+      --accent1: #38bdf8;
+      --accent2: #a855f7;
+      --accent3: #22c55e;
+      --glass-bg: rgba(15, 23, 42, 0.6);
+      --border-glass: rgba(148, 163, 184, 0.35);
+      --text-main: #e5e7eb;
+      --text-soft: #9ca3af;
+      --glow-soft: 0 0 25px rgba(56, 189, 248, 0.6);
+      --glow-strong: 0 0 60px rgba(168, 85, 247, 0.8);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated gradient background layer */
+    .gradient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: radial-gradient(circle at 0% 0%, #1d4ed8 0, transparent 55%),
+                  radial-gradient(circle at 100% 0%, #a855f7 0, transparent 55%),
+                  radial-gradient(circle at 0% 100%, #22c55e 0, transparent 55%),
+                  radial-gradient(circle at 100% 100%, #06b6d4 0, transparent 55%);
+      filter: blur(60px) saturate(140%);
+      opacity: 0.6;
+      animation: bgMove 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgMove {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(-20px, 10px, 0) scale(1.05);
+      }
+      100% {
+        transform: translate3d(20px, -20px, 0) scale(1.08);
+      }
+    }
+
+    /* Floating glass shapes */
+    .floating-shape {
+      position: fixed;
+      border-radius: 32px;
+      background: radial-gradient(circle at top left, rgba(248, 250, 252, 0.18), rgba(15, 23, 42, 0.65));
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 0 40px rgba(15, 23, 42, 0.9);
+      z-index: -1;
+      pointer-events: none;
+      animation: float 14s ease-in-out infinite alternate;
+    }
+
+    .floating-shape:nth-child(1) {
+      width: 220px;
+      height: 220px;
+      top: 8%;
+      left: 6%;
+    }
+
+    .floating-shape:nth-child(2) {
+      width: 280px;
+      height: 280px;
+      top: 65%;
+      right: 8%;
+      animation-duration: 18s;
+      animation-delay: -4s;
+    }
+
+    .floating-shape:nth-child(3) {
+      width: 160px;
+      height: 160px;
+      top: 40%;
+      left: 70%;
+      animation-duration: 16s;
+      animation-delay: -2s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg);
+      }
+      50% {
+        transform: translate3d(10px, -18px, 0) rotate3d(0, 0, 1, 6deg);
+      }
+      100% {
+        transform: translate3d(-18px, 14px, 0) rotate3d(0, 0, 1, -6deg);
+      }
+    }
+
+    /* Loading screen */
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #020617 0, #000 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .loader-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0%, #e0f2fe, #38bdf8 40%, #0f172a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow:
+        0 0 0 1px rgba(148, 163, 184, 0.55),
+        0 0 55px rgba(56, 189, 248, 0.9),
+        0 0 95px rgba(168, 85, 247, 0.85);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .loader-logo span {
+      font-weight: 700;
+      font-size: 32px;
+      letter-spacing: 1px;
+      color: #0b1120;
+      text-shadow: 0 0 12px rgba(248, 250, 252, 0.9);
+    }
+
+    .loader-ring {
+      position: absolute;
+      inset: -12px;
+      border-radius: inherit;
+      border-top: 2px solid rgba(248, 250, 252, 0.88);
+      border-right: 2px solid transparent;
+      border-bottom: 2px solid rgba(56, 189, 248, 0.85);
+      border-left: 2px solid transparent;
+      opacity: 0.8;
+      animation: spin 1.3s linear infinite;
+    }
+
+    .loader-text {
+      margin-top: 24px;
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow:
+          0 0 0 1px rgba(148, 163, 184, 0.55),
+          0 0 45px rgba(56, 189, 248, 0.7),
+          0 0 80px rgba(168, 85, 247, 0.7);
+      }
+      50% {
+        box-shadow:
+          0 0 0 1px rgba(148, 163, 184, 0.75),
+          0 0 75px rgba(56, 189, 248, 1),
+          0 0 120px rgba(168, 85, 247, 1);
+      }
+    }
+
+    /* Page layout */
+    .page-shell {
+      position: relative;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 72px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0%, #bae6fd, #38bdf8 40%, #0f172a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow:
+        0 0 0 1px rgba(148, 163, 184, 0.65),
+        0 0 26px rgba(56, 189, 248, 0.9);
+    }
+
+    .brand-logo::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: inherit;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      opacity: 0.8;
+      filter: blur(4px);
+    }
+
+    .brand-logo span {
+      font-weight: 700;
+      font-size: 16px;
+      color: #020617;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-soft);
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: inherit;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: linear-gradient(to bottom right, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.1));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border 0.2s ease, transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    nav a:hover {
+      border-color: rgba(148, 163, 184, 0.6);
+      transform: translateY(-1px);
+      box-shadow: var(--glow-soft);
+      background: linear-gradient(to bottom right, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.5));
+    }
+
+    /* Hero section */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 52px;
+    }
+
+    .hero-left {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px 5px 5px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow: 0 0 40px rgba(15, 23, 42, 0.9);
+      margin-bottom: 14px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .hero-pill-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0%, #dcfce7, #22c55e 40%, #166534 100%);
+      box-shadow:
+        0 0 0 1px rgba(134, 239, 172, 0.6),
+        0 0 28px rgba(34, 197, 94, 0.9);
+    }
+
+    .hero-pill span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4vw, 42px);
+      line-height: 1.08;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(to right, #e5e7eb, #a5b4fc, #38bdf8, #22c55e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--text-soft);
+      max-width: 420px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .meta-pill {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(to bottom right, #38bdf8, #a855f7);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: transform 0.16s ease, box-shadow 0.18s ease, border 0.18s ease, background 0.18s ease;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, #38bdf8, #4f46e5, #a855f7);
+      color: #020617;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.9);
+    }
+
+    .btn-primary span.icon {
+      font-size: 16px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 0 55px rgba(56, 189, 248, 1);
+      border-color: rgba(15, 23, 42, 0.8);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-main);
+      border-color: rgba(148, 163, 184, 0.5);
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--glow-soft);
+      border-color: rgba(248, 250, 252, 0.7);
+    }
+
+    .hero-note {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    /* Hero right card with 3D tilt + glow aura */
+    .hero-right {
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: 28px;
+      padding: 18px 18px 16px;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.75));
+      border: 1px solid var(--border-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow:
+        0 22px 60px rgba(15, 23, 42, 0.95),
+        0 0 60px rgba(56, 189, 248, 0.65),
+        0 0 90px rgba(168, 85, 247, 0.6);
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.32) 0, transparent 55%),
+                  radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.32) 0, transparent 55%);
+      opacity: 0.7;
+      z-index: -1;
+    }
+
+    .hero-card-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-avatar-wrap {
+      position: relative;
+      margin-top: 4px;
+    }
+
+    .aura-ring {
+      position: absolute;
+      inset: -16px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.7), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(168, 85, 247, 0.7), transparent 55%);
+      filter: blur(26px);
+      opacity: 0.88;
+      animation: auraPulse 4s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes auraPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.85;
+      }
+      50% {
+        transform: scale(1.06);
+        opacity: 1;
+      }
+    }
+
+    .hero-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 2px solid rgba(248, 250, 252, 0.9);
+      box-shadow:
+        0 0 0 2px rgba(15, 23, 42, 0.9),
+        0 0 40px rgba(56, 189, 248, 0.9),
+        0 0 70px rgba(168, 85, 247, 0.9);
+      background: #020617;
+    }
+
+    .hero-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+
+    .hero-name {
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .hero-role {
+      font-size: 12px;
+      color: var(--text-soft);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-soft);
+    }
+
+    .hero-mini-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .hero-mini-col strong {
+      color: var(--text-main);
+      display: block;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .hero-status {
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: linear-gradient(120deg, rgba(22, 163, 74, 0.16), rgba(34, 197, 94, 0.04));
+      border: 1px solid rgba(22, 163, 74, 0.6);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0 0, #bbf7d0, #22c55e);
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.9);
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 42px;
+    }
+
+    section h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+    }
+
+    .section-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    /* Projects */
+    .project-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      padding: 14px 14px 13px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.8));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: box-shadow 0.2s ease, border 0.2s ease, transform 0.18s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.18), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      box-shadow:
+        0 26px 65px rgba(15, 23, 42, 0.95),
+        0 0 45px rgba(56, 189, 248, 0.65);
+      border-color: rgba(148, 163, 184, 0.75);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .card-chip {
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-soft);
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 7px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e0f2fe;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-link span.icon {
+      font-size: 14px;
+    }
+
+    /* Services */
+    .service-list {
+      list-style: none;
+      font-size: 12px;
+      color: var(--text-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .service-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .service-bullet {
+      margin-top: 3px;
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(to bottom right, #38bdf8, #a855f7);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      flex-shrink: 0;
+    }
+
+    .mini-note {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 10px;
+    }
+
+    /* Contact / WhatsApp block */
+    .contact-card {
+      padding: 12px 13px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contact-card p {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .wa-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0 0, rgba(34, 197, 94, 0.2), rgba(15, 23, 42, 1));
+      border: 1px solid rgba(34, 197, 94, 0.75);
+      font-size: 12px;
+      color: #bbf7d0;
+      text-decoration: none;
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.9);
+    }
+
+    .wa-badge span.icon {
+      font-size: 18px;
+    }
+
+    footer {
+      font-size: 11px;
+      color: var(--text-soft);
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding-top: 16px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* 3D tilt */
+    .tilt {
+      transition: transform 0.12s ease-out;
+    }
+
+    /* Responsive */
+    @media (max-width: 880px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      nav {
+        align-self: stretch;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-right {
+        order: -1;
+      }
+      .section-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .page-shell {
+        padding-inline: 14px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .hero-card {
+        padding-inline: 14px;
+      }
+      .hero-avatar {
+        width: 110px;
+        height: 110px;
+      }
+      .hero-title {
+        font-size: 26px;
+      }
+      .hero-meta {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated gradient base -->
+  <div class="gradient-bg"></div>
+
+  <!-- Floating glass shapes -->
+  <div class="floating-shape"></div>
+  <div class="floating-shape"></div>
+  <div class="floating-shape"></div>
+
+  <!-- Loading screen -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-logo">
+      <div class="loader-ring"></div>
+      <span>PK</span>
+    </div>
+    <div class="loader-text">Launching Minimal Modern</div>
+  </div>
+
+  <div class="page-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">
+          <span>PK</span>
+        </div>
+        <div class="brand-text">
+          <h1>PATHAN MOHAMMAD KAIF KHAN</h1>
+          <p>Minimal Modern Web Experiences</p>
+        </div>
+      </div>
+      <nav>
+        <a href="#hero">Hero</a>
+        <a href="#projects">Real Projects</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <main id="hero" class="hero">
+      <section class="hero-left">
+        <div class="hero-pill">
+          <div class="hero-pill-dot"></div>
+          <span>Option A · Minimal Modern</span>
+        </div>
+        <h2 class="hero-title">
+          I design <span>premium minimal websites</span><br />
+          that feel ultra-modern & clean.
+        </h2>
+        <p class="hero-subtitle">
+          I build one-page experiences like the ones you see here – smooth gradients,
+          glassmorphism, and neat animations that make your brand look sharp,
+          premium, and easy to understand.
+        </p>
+
+        <div class="hero-meta">
+          <div class="meta-pill">
+            <div class="meta-dot"></div>
+            <span>Landing pages for small brands</span>
+          </div>
+          <div class="meta-pill">
+            <div class="meta-dot"></div>
+            <span>Modern Glass + Gradient UI</span>
+          </div>
+          <div class="meta-pill">
+            <div class="meta-dot"></div>
+            <span>HTML · CSS · Basic JS</span>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a
+            href="#projects"
+            class="btn btn-primary"
+          >
+            <span class="icon">✨</span>
+            <span>View My Real Projects</span>
+          </a>
+          <a
+            href="https://wa.me/919601490599?text=Hi%20Kaif%2C%20I%20saw%20your%20Minimal%20Modern%20website.%20Let's%20discuss%20a%20project."
+            target="_blank"
+            class="btn btn-ghost"
+          >
+            <span class="icon">💬</span>
+            <span>Chat on WhatsApp</span>
+          </a>
+        </div>
+        <p class="hero-note">
+          Based in India · Available for simple, modern single-page websites
+          (like the examples below).
+        </p>
+      </section>
+
+      <!-- HERO RIGHT – Photo + Glow Aura + Tilt -->
+      <aside class="hero-right">
+        <div class="hero-card tilt" data-tilt-depth="25">
+          <div class="hero-card-inner">
+            <div class="hero-avatar-wrap">
+              <div class="aura-ring"></div>
+              <div class="hero-avatar">
+                <!-- Aapka GitHub raw photo link -->
+                <img
+                  src="https://raw.githubusercontent.com/kaifkhan1087/my-web-page/d110ad3ee94169380d8aaf16f00f6f183cc01c04/WhatsApp%20Image%202025-12-10%20at%203.32.01%20PM.jpeg"
+                  alt="Pathan Mohammad Kaif Khan"
+                />
+              </div>
+            </div>
+            <div class="hero-name">Pathan Mohammad Kaif Khan</div>
+            <div class="hero-role">Minimal Modern Web Designer &amp; Developer</div>
+
+            <div class="hero-tags">
+              <span class="tag">Single-page Websites</span>
+              <span class="tag">Glassmorphism</span>
+              <span class="tag">Animated Gradients</span>
+            </div>
+
+            <div class="hero-mini-row">
+              <div class="hero-mini-col">
+                <strong>Real Work</strong>
+                <span>Portfolio &amp; Interior sites live on GitHub.</span>
+              </div>
+              <div class="hero-mini-col" style="text-align: right;">
+                <strong>Tech Stack</strong>
+                <span>HTML · CSS · JS</span>
+              </div>
+            </div>
+
+            <div class="hero-status">
+              <div class="status-dot"></div>
+              <span>Open to new website projects – send your idea on WhatsApp &amp; I’ll suggest a modern design.</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- PROJECTS + SERVICES -->
+    <section id="projects">
+      <h2>Real Projects · Live on Web</h2>
+      <div class="section-row">
+        <div>
+          <div class="project-grid">
+            <!-- Project 1 -->
+            <article class="card tilt" data-tilt-depth="18">
+              <div class="card-header">
+                <div class="card-title">My Web Page – Personal Landing</div>
+                <div class="card-chip">Live Project</div>
+              </div>
+              <p class="card-desc">
+                A clean personal web page with sections, links, and smooth layout.
+                Built fully with HTML &amp; CSS and deployed via GitHub Pages.
+              </p>
+              <div class="card-footer">
+                <span>Role: Design &amp; Frontend Build</span>
+                <a
+                  class="card-link"
+                  href="https://kaifkhan1087.github.io/my-web-page/"
+                  target="_blank"
+                >
+                  <span class="icon">↗</span>
+                  <span>Open Site</span>
+                </a>
+              </div>
+            </article>
+
+            <!-- Project 2 -->
+            <article class="card tilt" data-tilt-depth="18">
+              <div class="card-header">
+                <div class="card-title">Interior Website – Work Showcase</div>
+                <div class="card-chip">Live Project</div>
+              </div>
+              <p class="card-desc">
+                A modern interior/design style layout with portfolio images,
+                clean typography and bold sections to present ongoing work.
+              </p>
+              <div class="card-footer">
+                <span>Role: Layout, Styling &amp; Structure</span>
+                <a
+                  class="card-link"
+                  href="https://kaifkhan1087.github.io/my-interior-website/"
+                  target="_blank"
+                >
+                  <span class="icon">↗</span>
+                  <span>Open Site</span>
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <aside id="services">
+          <section class="card">
+            <div class="card-header" style="margin-bottom: 10px;">
+              <div class="card-title">Services I Offer</div>
+              <div class="card-chip">Simple · Modern · Focused</div>
+            </div>
+            <ul class="service-list">
+              <li>
+                <div class="service-bullet"></div>
+                <div>
+                  <strong>Single-page Websites like these</strong><br />
+                  Perfect for personal brand, small business, simple product, or
+                  service introduction.
+                </div>
+              </li>
+              <li>
+                <div class="service-bullet"></div>
+                <div>
+                  <strong>Minimal Modern UI</strong><br />
+                  Animated gradient backgrounds, glassmorphism cards, subtle
+                  3D/tilt effects and glow aura highlights.
+                </div>
+              </li>
+              <li>
+                <div class="service-bullet"></div>
+                <div>
+                  <strong>Hero Section + WhatsApp CTA</strong><br />
+                  Strong hero section with your photo, your services and direct
+                  WhatsApp button for leads.
+                </div>
+              </li>
+              <li>
+                <div class="service-bullet"></div>
+                <div>
+                  <strong>Basic Logo / Brand Badge</strong><br />
+                  Simple premium-looking text logo or badge based on your name /
+                  initials (like the PK logo you see here).
+                </div>
+              </li>
+            </ul>
+            <p class="mini-note">
+              Note: I focus on modern static pages (no complex backend). Ideal
+              for clients who need a clean, fast portfolio or info site.
+            </p>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CONTACT / WHATSAPP -->
+    <section id="contact">
+      <h2>Let's Build Your Minimal Modern Website</h2>
+      <div class="section-row">
+        <div class="contact-card">
+          <p>
+            Agar aapko meri upar wali <strong>real websites</strong> jaisi
+            single-page site chahiye, to aap directly WhatsApp par message
+            kar sakte ho. Apna:
+          </p>
+          <ul class="service-list" style="margin-top: 6px;">
+            <li>
+              <div class="service-bullet"></div>
+              <div>Business / Service ka naam</div>
+            </li>
+            <li>
+              <div class="service-bullet"></div>
+              <div>Short description – aap kya karte ho</div>
+            </li>
+            <li>
+              <div class="service-bullet"></div>
+              <div>Jo sections chahiye (About, Services, Gallery, etc.)</div>
+            </li>
+          </ul>
+          <p class="mini-note">
+            Phir main aapko ek simple, modern layout suggest karunga – isi style
+            ke look &amp; feel mein (Option A – Minimal Modern).
+          </p>
+
+          <a
+            class="wa-badge"
+            href="https://wa.me/919601490599?text=Hi%20Kaif%2C%20I%20want%20a%20minimal%20modern%20website%20like%20your%20portfolio."
+            target="_blank"
+          >
+            <span class="icon">📱</span>
+            <span>WhatsApp: +91 9601490599</span>
+          </a>
+        </div>
+
+        <div class="card" style="font-size: 11px;">
+          <div class="card-header" style="margin-bottom: 10px;">
+            <div class="card-title">Tech + Visual Style</div>
+            <div class="card-chip">Under the Hood</div>
+          </div>
+          <p class="card-desc" style="margin-bottom: 10px;">
+            This page demonstrates my go-to combination: animated gradients,
+            glassmorphism, glow aura effects, subtle loading animation and
+            3D parallax tilt – all with clean, readable content.
+          </p>
+          <ul class="service-list">
+            <li>
+              <div class="service-bullet"></div>
+              <div>Pure HTML, CSS &amp; small JavaScript (no heavy frameworks).</div>
+            </li>
+            <li>
+              <div class="service-bullet"></div>
+              <div>Fast to host on GitHub Pages or simple shared hosting.</div>
+            </li>
+            <li>
+              <div class="service-bullet"></div>
+              <div>Responsive layout – works on mobile, tablet and desktop.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Pathan Mohammad Kaif Khan.</span>
+      <span>Designed in Option A – Minimal Modern style.</span>
+    </footer>
+  </div>
+
+  <script>
+    // Loading screen hide
+    window.addEventListener("load", function () {
+      const loader = document.getElementById("loader");
+      setTimeout(() => {
+        loader.classList.add("hidden");
+      }, 1200);
+    });
+
+    // Dynamic year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Simple 3D tilt effect for elements with .tilt
+    (function () {
+      const tiltElements = document.querySelectorAll(".tilt");
+      const maxAngleDefault = 18;
+
+      tiltElements.forEach((el) => {
+        const depthAttr = el.getAttribute("data-tilt-depth");
+        const maxAngle = depthAttr ? parseFloat(depthAttr) : maxAngleDefault;
+
+        function handleMove(e) {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const halfWidth = rect.width / 2;
+          const halfHeight = rect.height / 2;
+          const rotateY = ((x - halfWidth) / halfWidth) * maxAngle;
+          const rotateX = -((y - halfHeight) / halfHeight) * maxAngle;
+
+          el.style.transform =
+            "rotateX(" +
+            rotateX.toFixed(2) +
+            "deg) rotateY(" +
+            rotateY.toFixed(2) +
+            "deg) translateZ(0)";
+        }
+
+        function resetTilt() {
+          el.style.transform =
+            "rotateX(0deg) rotateY(0deg) translateZ(0)";
+        }
+
+        el.addEventListener("mousemove", handleMove);
+        el.addEventListener("mouseleave", resetTilt);
+      });
+    })();
+  </script>
+</body>
+</html>
