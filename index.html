@@ -717,12 +717,14 @@
     }
     .project-card.featured .project-visual { height: 260px; }
 
+    /* Visual Backgrounds */
     .project-visual.township { background: linear-gradient(135deg, #0f172a, #1e3a8a 60%, #3b82f6); }
     .project-visual.glowinn { background: linear-gradient(135deg, #4a044e, #831843 60%, #f472b6); }
     .project-visual.os { background: linear-gradient(135deg, #030712, #111827 60%, #374151); }
     .project-visual.interior { background: linear-gradient(135deg, #451a03, #78350f 60%, #d97706); }
     .project-visual.portfolio { background: linear-gradient(135deg, #09090b, #18181b 60%, #27272a); }
     .project-visual.grocery { background: linear-gradient(135deg, #064e3b, #047857 55%, #34d399); }
+    .project-visual.fitness { background: linear-gradient(135deg, #450a0a, #991b1b 55%, #ef4444); }
     .project-visual.ai { background: linear-gradient(135deg, #172554, #1e1b4b 60%, #4338ca); }
 
     .visual-label {
@@ -1031,7 +1033,7 @@
   <div class="cursor-dot" data-cursor-dot></div>
   <div class="cursor-outline" data-cursor-outline></div>
 
-  <!-- Theme Switcher -->
+  <!-- Theme Switcher (Top Right on Both Mobile & Desktop) -->
   <button class="theme-toggle magnetic-btn" id="theme-btn" aria-label="Toggle Theme">☀️</button>
 
   <!-- Responsive Navigation Bar -->
@@ -1171,6 +1173,7 @@
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="real-estate">Real Estate</button>
       <button class="filter-btn" data-filter="e-commerce">E-Commerce</button>
+      <button class="filter-btn" data-filter="fitness">Fitness</button>
       <button class="filter-btn" data-filter="ui">UI / Product</button>
       <button class="filter-btn" data-filter="business">Business</button>
       <button class="filter-btn" data-filter="ai">AI</button>
@@ -1182,7 +1185,7 @@
       <article class="project-card featured" data-category="real-estate">
         <div class="project-visual township">
           <span class="project-badge">Featured • Real Estate</span>
-          <div class="visual-label">MOIN APARTMENT 2<br><small style="font-size: 13px; opacity:0.8;">& MOIN BAGH</small></div>
+          <div class="visual-label">MOIN APARTMENT<br><small style="font-size: 13px; opacity:0.8;">MOIN BAGH</small></div>
         </div>
         <div class="project-body">
           <div class="project-meta">Interactive Spatial Brochure</div>
@@ -1208,7 +1211,22 @@
         </div>
       </article>
 
-      <!-- Project 3 (AuraOS) -->
+      <!-- Project 3 (PowerGym / Gym & Fitness Web Application) -->
+      <article class="project-card" data-category="fitness">
+        <div class="project-visual fitness">
+          <span class="project-badge">Fitness & Health</span>
+          <div class="visual-label">POWER GYM<br><small style="font-size: 12px; opacity:0.8;">FITNESS & MEMBERSHIP HUB</small></div>
+        </div>
+        <div class="project-body">
+          <div class="project-meta">High-Energy Web App</div>
+          <h3>Powergym Fitness Club</h3>
+          <p>Modern, responsive gym and fitness website showcasing workout programs, trainer profiles, interactive membership pricing tables, and direct inquiry booking.</p>
+          <div class="tag-row"><span>Fitness UI</span><span>Pricing Tables</span><span>Schedule Grid</span><span>Contact Flow</span></div>
+          <a class="project-link project-open" href="https://kaifkhan1087.github.io/Gym/#contact" target="_blank" rel="noopener">View Case Study ↗</a>
+        </div>
+      </article>
+
+      <!-- Project 4 (AuraOS) -->
       <article class="project-card" data-category="ui">
         <div class="project-visual os">
           <span class="project-badge">Interactive OS</span>
@@ -1223,7 +1241,7 @@
         </div>
       </article>
 
-      <!-- Project 4 (ITQAN Interiors) -->
+      <!-- Project 5 (ITQAN Interiors) -->
       <article class="project-card" data-category="business">
         <div class="project-visual interior">
           <span class="project-badge">Architecture</span>
@@ -1238,7 +1256,7 @@
         </div>
       </article>
 
-      <!-- Project 5 (Glowinn Cosmetics) -->
+      <!-- Project 6 (Glowinn Cosmetics) -->
       <article class="project-card" data-category="ui">
         <div class="project-visual glowinn">
           <span class="project-badge">Beauty • Premium UI</span>
@@ -1253,11 +1271,11 @@
         </div>
       </article>
 
-      <!-- Project 6 (Odyssey Operations Hub) -->
+      <!-- Project 7 (Odyssey Service center web) -->
       <article class="project-card" data-category="business">
         <div class="project-visual portfolio">
           <span class="project-badge">Operations Portal</span>
-          <div class="visual-label">ODYSSEY<br><small style="font-size: 12px; opacity:0.8;">SERVICE HUB</small></div>
+          <div class="visual-label">Odyssey technologies<br><small style="font-size: 12px; opacity:0.8;">SERVICE HUB</small></div>
         </div>
         <div class="project-body">
           <div class="project-meta">Operations Management</div>
@@ -1268,7 +1286,7 @@
         </div>
       </article>
 
-      <!-- Project 7 (AI Product Prototype) -->
+      <!-- Project 8 (AI Product Prototype) -->
       <article class="project-card featured" data-category="ai">
         <div class="project-visual ai">
           <span class="project-badge">GenAI • Smart Retail</span>
@@ -1567,7 +1585,7 @@
           modalOpen.style.display = 'none';
         }
 
-        modalHero.className = 'modal-hero ' + ([...visual.classList].find(c => ['township', 'glowinn', 'os', 'interior', 'portfolio', 'grocery', 'ai'].includes(c)) || '');
+        modalHero.className = 'modal-hero ' + ([...visual.classList].find(c => ['township', 'glowinn', 'os', 'interior', 'portfolio', 'grocery', 'fitness', 'ai'].includes(c)) || '');
         modalVisualLabel.innerHTML = visual.querySelector('.visual-label')?.innerHTML || title;
         
         projectModal.classList.add('open');
